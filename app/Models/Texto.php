@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Limpeza;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,9 @@ class Texto extends Model
 
     protected static function booted(): void
     {
+        static::saving(function (Texto $texto) {
+            $texto->valor = $texto->ehHtml() ? Limpeza::html($texto->valor) : Limpeza::texto($texto->valor);
+        });
         static::saved(fn () => self::$cache = null);
         static::deleted(fn () => self::$cache = null);
     }

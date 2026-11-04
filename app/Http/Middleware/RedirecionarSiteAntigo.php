@@ -7,6 +7,7 @@ use App\Models\Peca;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -28,6 +29,11 @@ class RedirecionarSiteAntigo
 
     public function handle(Request $request, Closure $next): Response
     {
+        // Pedidos a /index.php fazem o Laravel gerar URLs com /index.php/...; usa-se a raiz do site.
+        if (str_contains($request->getBaseUrl(), 'index.php')) {
+            URL::forceRootUrl(config('app.url'));
+        }
+
         if ($request->isMethod('GET') && $request->query->has('pagina') && in_array($request->path(), ['/', 'index.php'], true)) {
             return redirect()->to($this->destino($request), 301);
         }

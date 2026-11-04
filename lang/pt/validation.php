@@ -1,0 +1,73 @@
+<?php
+
+// Mensagens de validação em português de Portugal (as mais usadas no backoffice).
+// As que faltarem aparecem em inglês (APP_FALLBACK_LOCALE=en).
+
+return [
+    'accepted' => 'O campo :attribute tem de ser aceite.',
+    'active_url' => 'O campo :attribute tem de ser um URL válido.',
+    'after' => 'O campo :attribute tem de ser uma data posterior a :date.',
+    'after_or_equal' => 'O campo :attribute tem de ser uma data igual ou posterior a :date.',
+    'array' => 'O campo :attribute tem de ser uma lista.',
+    'before' => 'O campo :attribute tem de ser uma data anterior a :date.',
+    'before_or_equal' => 'O campo :attribute tem de ser uma data igual ou anterior a :date.',
+    'between' => [
+        'array' => 'O campo :attribute tem de ter entre :min e :max elementos.',
+        'file' => 'O ficheiro :attribute tem de ter entre :min e :max kilobytes.',
+        'numeric' => 'O campo :attribute tem de estar entre :min e :max.',
+        'string' => 'O campo :attribute tem de ter entre :min e :max caracteres.',
+    ],
+    'boolean' => 'O campo :attribute tem de ser verdadeiro ou falso.',
+    'confirmed' => 'A confirmação do campo :attribute não coincide.',
+    'current_password' => 'A palavra-passe está errada.',
+    'date' => 'O campo :attribute tem de ser uma data válida.',
+    'date_format' => 'O campo :attribute tem de ter o formato :format.',
+    'different' => 'Os campos :attribute e :other têm de ser diferentes.',
+    'email' => 'O campo :attribute tem de ser um email válido.',
+    'exists' => 'O valor escolhido em :attribute não é válido.',
+    'file' => 'O campo :attribute tem de ser um ficheiro.',
+    'filled' => 'O campo :attribute tem de ter um valor.',
+    'image' => 'O campo :attribute tem de ser uma imagem.',
+    'in' => 'O valor escolhido em :attribute não é válido.',
+    'integer' => 'O campo :attribute tem de ser um número inteiro.',
+    'max' => [
+        'array' => 'O campo :attribute não pode ter mais de :max elementos.',
+        'file' => 'O ficheiro :attribute não pode ter mais de :max kilobytes.',
+        'numeric' => 'O campo :attribute não pode ser maior do que :max.',
+        'string' => 'O campo :attribute não pode ter mais de :max caracteres.',
+    ],
+    'mimes' => 'O campo :attribute tem de ser um ficheiro do tipo: :values.',
+    'mimetypes' => 'O campo :attribute tem de ser um ficheiro do tipo: :values.',
+    'min' => [
+        'array' => 'O campo :attribute tem de ter pelo menos :min elementos.',
+        'file' => 'O ficheiro :attribute tem de ter pelo menos :min kilobytes.',
+        'numeric' => 'O campo :attribute tem de ser pelo menos :min.',
+        'string' => 'O campo :attribute tem de ter pelo menos :min caracteres.',
+    ],
+    'multiple_of' => 'O campo :attribute tem de ser múltiplo de :value.',
+    'numeric' => 'O campo :attribute tem de ser um número.',
+    'password' => [
+        'letters' => 'O campo :attribute tem de ter pelo menos uma letra.',
+        'mixed' => 'O campo :attribute tem de ter maiúsculas e minúsculas.',
+        'numbers' => 'O campo :attribute tem de ter pelo menos um número.',
+        'symbols' => 'O campo :attribute tem de ter pelo menos um símbolo.',
+        'uncompromised' => 'Esta palavra-passe apareceu numa fuga de dados. Escolha outra.',
+    ],
+    'regex' => 'O formato do campo :attribute não é válido.',
+    'required' => 'O campo :attribute é obrigatório.',
+    'required_if' => 'O campo :attribute é obrigatório quando :other é :value.',
+    'required_with' => 'O campo :attribute é obrigatório quando :values está preenchido.',
+    'same' => 'Os campos :attribute e :other têm de coincidir.',
+    'size' => [
+        'array' => 'O campo :attribute tem de ter :size elementos.',
+        'file' => 'O ficheiro :attribute tem de ter :size kilobytes.',
+        'numeric' => 'O campo :attribute tem de ser :size.',
+        'string' => 'O campo :attribute tem de ter :size caracteres.',
+    ],
+    'string' => 'O campo :attribute tem de ser texto.',
+    'unique' => 'Já existe um registo com este :attribute.',
+    'uploaded' => 'Não foi possível enviar o ficheiro :attribute (pode ser demasiado grande).',
+    'url' => 'O campo :attribute tem de ser um URL válido.',
+
+    'attributes' => [],
+];

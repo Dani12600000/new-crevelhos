@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\TipoPeca;
 use App\Services\ImagensPeca;
+use App\Support\Limpeza;
 use Database\Factories\PecaFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -46,6 +47,18 @@ class Peca extends Model
     {
         static::creating(function (Peca $peca) {
             $peca->ref ??= self::proximaRef($peca->tipo);
+        });
+
+        static::saving(function (Peca $peca) {
+            // O site mostra a descrição como HTML: limpa-se sempre ao gravar.
+            if ($peca->isDirty('descricao')) {
+                $peca->descricao = Limpeza::html($peca->descricao);
+            }
+
+            // Década a partir do ano da data, a não ser que o editor a tenha escrito.
+            if (blank($peca->decada) || ($peca->isDirty('data_texto') && ! $peca->isDirty('decada'))) {
+                $peca->decada = Limpeza::decada($peca->data_texto ?? $peca->data_publicacao?->format('Y-m-d'));
+            }
         });
 
         // Ficheiro novo enviado pelo backoffice: mover para pecas/{ref}/ e gerar WebP + miniatura.

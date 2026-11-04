@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->web(prepend: [
+            App\Http\Middleware\RedirecionarSiteAntigo::class,
+        ]);
+
+        // Não há login no site público: quem não tem sessão vai para o login do backoffice.
+        $middleware->redirectGuestsTo(fn () => route('filament.admin.auth.login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

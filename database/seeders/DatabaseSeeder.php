@@ -2,24 +2,23 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Papel;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(TextosSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Só em desenvolvimento: um administrador de teste para entrar no /admin.
+        // Em produção crie os utilizadores com `php artisan crevelhos:utilizador`.
+        if (app()->isLocal()) {
+            User::firstOrCreate(
+                ['email' => 'admin@crevelhos.test'],
+                ['name' => 'Administrador (teste local)', 'password' => 'crevelhos-local', 'papel' => Papel::Admin],
+            );
+        }
     }
 }

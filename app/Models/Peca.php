@@ -125,7 +125,7 @@ class Peca extends Model
             if (mb_strlen($texto) >= 8) {
                 $frase = preg_split('/(?<=[.!?])\s/u', $texto)[0];
 
-                return Str::limit($frase, 80, '…');
+                return Str::limit($frase, 70, '…', preserveWords: true);
             }
 
             $partes = array_filter([$this->tipo->getLabel(), $this->jornal, $this->local]);

@@ -12,7 +12,8 @@ use Throwable;
 #[Signature('crevelhos:importar
     {--pasta= : Pasta com as imagens antigas (por omissão, CREVELHOS_LEGADO_PATH)}
     {--sem-ficheiros : Não copia imagens nem gera WebP/miniaturas (mais rápido)}
-    {--forcar-textos : Substitui os textos das páginas mesmo que já tenham sido editados}')]
+    {--forcar-textos : Substitui os textos das páginas mesmo que já tenham sido editados}
+    {--relatorio= : Onde escrever o relatório (por omissão, storage/app/importacao/relatorio.md)}')]
 #[Description('Importa a base de dados antiga (conexão "legado") e gera o relatório de revisão')]
 class ImportarCrevelhos extends Command
 {
@@ -41,7 +42,7 @@ class ImportarCrevelhos extends Command
             ->aoProgredir(fn (string $msg) => $this->output->isVerbose() ? $this->line("  {$msg}") : null)
             ->executar($pasta, ! $this->option('sem-ficheiros'), (bool) $this->option('forcar-textos'));
 
-        $caminho = storage_path('app/importacao/relatorio.md');
+        $caminho = $this->option('relatorio') ?: storage_path('app/importacao/relatorio.md');
         $relatorio->guardar($caminho);
 
         $this->table(['', 'Total'], $relatorio->resumo());

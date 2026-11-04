@@ -123,9 +123,11 @@ class PesquisaPecas
     {
         $ids = $this->consulta(comTema: false)->reorder()->select('pecas.id');
 
+        $soEstas = fn ($q) => $q->whereIn('pecas.id', $ids);
+
         return Tema::query()
-            ->withCount(['pecas' => fn ($q) => $q->whereIn('pecas.id', $ids)])
-            ->having('pecas_count', '>', 0)
+            ->whereHas('pecas', $soEstas)
+            ->withCount(['pecas' => $soEstas])
             ->orderBy('nome')
             ->get();
     }

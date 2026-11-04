@@ -84,6 +84,10 @@ class ImagensPeca
         }
 
         $disco = Storage::disk('public');
+        if (! $disco->exists($peca->ficheiro)) {
+            return;
+        }
+
         $enviado = $disco->path($peca->ficheiro);
         $caminhoEnviado = $peca->ficheiro;
 

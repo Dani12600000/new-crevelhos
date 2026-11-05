@@ -34,7 +34,55 @@ document.querySelectorAll('[data-botao-tema]').forEach((botao) => {
     });
 });
 
+// ------------------------------------------------------------ menu do telemóvel
+
+document.querySelectorAll('[data-botao-menu]').forEach((botao) => {
+    const cabecalho = botao.closest('.cabecalho');
+    const texto = botao.querySelector('[data-texto-menu]');
+
+    const definir = (aberto) => {
+        cabecalho.classList.toggle('menu-aberto', aberto);
+        botao.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+        texto.textContent = aberto ? 'Fechar' : 'Menu';
+    };
+
+    botao.addEventListener('click', () => definir(botao.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && cabecalho.classList.contains('menu-aberto')) {
+            definir(false);
+            botao.focus();
+        }
+    });
+});
+
+// ------------------------------------------------------------ filtros do arquivo
+
+// No telemóvel, os campos tipo/década/tema começam fechados (se não houver filtros
+// ativos), para os resultados aparecerem logo. No computador estão sempre abertos.
+document.querySelectorAll('[data-mais-filtros]').forEach((bloco) => {
+    const computador = window.matchMedia('(min-width: 960px)');
+    const ajustar = () => {
+        bloco.open = computador.matches || bloco.hasAttribute('data-ativos');
+    };
+    ajustar();
+    computador.addEventListener('change', ajustar);
+});
+
 // ------------------------------------------------------------ números na fotografia
+
+// Desloca o balão com o nome para não sair pelas margens do ecrã.
+function encaixarBalao(numero) {
+    const balao = numero.querySelector('.balao');
+    if (!balao) return;
+    balao.style.setProperty('--desvio', '0px');
+    const r = balao.getBoundingClientRect();
+    const margem = 8;
+    const largura = document.documentElement.clientWidth;
+    let desvio = 0;
+    if (r.left < margem) desvio = margem - r.left;
+    else if (r.right > largura - margem) desvio = largura - margem - r.right;
+    balao.style.setProperty('--desvio', `${Math.round(desvio)}px`);
+}
 
 document.querySelectorAll('[data-imagem-marcada]').forEach((caixa) => {
     const numeros = caixa.querySelectorAll('.marca-numero');
@@ -42,7 +90,10 @@ document.querySelectorAll('[data-imagem-marcada]').forEach((caixa) => {
     const fecharTodos = (exceto) => numeros.forEach((n) => n !== exceto && n.setAttribute('aria-expanded', 'false'));
 
     numeros.forEach((numero) => {
+        numero.addEventListener('mouseenter', () => encaixarBalao(numero));
+        numero.addEventListener('focus', () => encaixarBalao(numero));
         numero.addEventListener('click', (evento) => {
+            encaixarBalao(numero);
             evento.stopPropagation();
             const aberto = numero.getAttribute('aria-expanded') === 'true';
             fecharTodos(numero);

@@ -186,6 +186,62 @@ main { flex: 1; padding-block: 2rem 4rem; }
     border: 1px solid var(--linha); border-radius: 8px; min-height: 44px; padding: 0.3rem 0.75rem;
 }
 
+/* Menu: no computador, a navegação e o tema ficam lado a lado com a marca. */
+.menu-principal, .menu-interior { display: contents; }
+.botao-menu { display: none; }
+
+/* Telemóvel: menu num botão, links grandes em lista. */
+@media (max-width: 759px) {
+    .cabecalho .contentor { padding-block: 0.75rem; }
+    .marca { flex: 1; min-width: 0; }
+    .marca .titulo { font-size: 1.25rem; }
+
+    .botao-menu {
+        display: inline-flex; align-items: center; gap: 0.5rem; flex: none;
+        font: inherit; font-weight: 700; cursor: pointer; min-height: 48px; padding: 0.4rem 0.9rem;
+        background: transparent; color: var(--azulejo); border: 2px solid var(--azulejo); border-radius: 8px;
+    }
+    .icone-menu, .icone-menu::before, .icone-menu::after {
+        display: block; width: 1.1rem; height: 2px; background: currentColor; border-radius: 2px;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .icone-menu { position: relative; }
+    .icone-menu::before, .icone-menu::after { content: ''; position: absolute; left: 0; }
+    .icone-menu::before { top: -6px; }
+    .icone-menu::after { top: 6px; }
+    .menu-aberto .icone-menu { background: transparent; }
+    .menu-aberto .icone-menu::before { transform: translateY(6px) rotate(45deg); }
+    .menu-aberto .icone-menu::after { transform: translateY(-6px) rotate(-45deg); }
+
+    /* Animação: a linha da grelha passa de 0fr (fechado) a 1fr (aberto),
+       o que anima a altura até ao tamanho real do conteúdo. */
+    .cabecalho .contentor { row-gap: 0; }
+    .menu-principal {
+        display: grid; grid-template-rows: 1fr; flex-basis: 100%;
+        transition: grid-template-rows 0.3s ease, opacity 0.25s ease, visibility 0s;
+    }
+    .menu-interior { display: grid; gap: 0.75rem; min-height: 0; overflow: hidden; }
+    .menu-interior .navegacao {
+        margin-top: 0.75rem; border-top: 1px solid var(--linha); padding-top: 0.25rem;
+        transition: transform 0.3s ease;
+    }
+    .menu-interior .ferramentas { padding-bottom: 0.25rem; }
+    /* Fechado: altura 0 e invisível (os links saem da ordem do Tab só no fim da animação). */
+    .js .cabecalho:not(.menu-aberto) .menu-principal {
+        grid-template-rows: 0fr; opacity: 0; visibility: hidden;
+        transition: grid-template-rows 0.3s ease, opacity 0.2s ease, visibility 0s linear 0.3s;
+    }
+    .js .cabecalho:not(.menu-aberto) .menu-interior .navegacao { transform: translateY(-0.75rem); }
+    /* Sem JavaScript não há botão: o menu fica sempre aberto. */
+    html:not(.js) .botao-menu { display: none; }
+
+    .navegacao ul { flex-direction: column; gap: 0; }
+    .navegacao li + li { border-top: 1px solid var(--linha); }
+    .navegacao a { padding: 0.8rem 0.25rem; border-radius: 0; font-size: 1.1rem; }
+    .navegacao a[aria-current="page"] { box-shadow: inset 4px 0 0 var(--azulejo); padding-left: 0.85rem; }
+    .botao-tema { width: 100%; }
+}
+
 /* ------------------------------------------------------------ rodapé */
 
 .rodape {
@@ -289,6 +345,24 @@ main { flex: 1; padding-block: 2rem 4rem; }
 .filtros label, .filtros legend { font-weight: 700; display: block; margin-bottom: 0.3rem; }
 .filtros fieldset { border: 0; padding: 0; margin: 0; }
 
+.mais-filtros .campos-filtros { display: grid; gap: 1rem; }
+.mais-filtros summary {
+    cursor: pointer; font-weight: 700; color: var(--azulejo);
+    min-height: 48px; display: flex; align-items: center; gap: 0.5rem;
+    list-style: none; border: 2px solid var(--linha); border-radius: 8px; padding: 0.5rem 0.75rem;
+}
+.mais-filtros summary::-webkit-details-marker { display: none; }
+.mais-filtros summary::after { content: '▾'; margin-left: auto; transition: transform 0.15s ease; }
+.mais-filtros[open] summary { margin-bottom: 1rem; }
+.mais-filtros[open] summary::after { transform: rotate(180deg); }
+/* No computador os filtros estão sempre à vista: o resumo não faz falta. */
+@media (min-width: 960px) {
+    .mais-filtros summary { display: none; }
+}
+@media (max-width: 959px) {
+    .filtros.caixa { padding: 1rem; }
+}
+
 input[type="search"], input[type="text"], select {
     font: inherit; width: 100%; min-height: 48px; padding: 0.5rem 0.75rem;
     border: 2px solid var(--linha); border-radius: 8px; background: var(--cartao); color: var(--tinta);
@@ -346,7 +420,11 @@ a.etiqueta:hover { border-color: var(--azulejo); color: var(--azulejo); }
 .balao {
     position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%);
     background: #1d2126; color: #fff; padding: 0.35rem 0.65rem; border-radius: 6px;
-    font-size: 0.9rem; font-weight: 400; white-space: nowrap; pointer-events: none;
+    font-size: 0.9rem; font-weight: 400; pointer-events: none;
+    /* Nomes compridos partem em duas linhas em vez de saírem do ecrã. */
+    width: max-content; max-width: min(16rem, 70vw); text-align: center; line-height: 1.3;
+    /* --desvio é calculado no JS para o balão não sair pelas margens. */
+    transform: translateX(calc(-50% + var(--desvio, 0px)));
     opacity: 0; visibility: hidden; transition: opacity 0.12s;
 }
 .marca-numero:hover .balao, .marca-numero:focus-visible .balao, .marca-numero[aria-expanded="true"] .balao { opacity: 1; visibility: visible; }

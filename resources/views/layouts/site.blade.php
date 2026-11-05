@@ -29,6 +29,8 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <script>
         // Aplica o tema guardado antes de desenhar a página (evita o "flash").
+        // A classe "js" permite fechar o menu do telemóvel só quando há JavaScript.
+        document.documentElement.classList.add('js');
         try { var t = localStorage.getItem('crevelhos-tema'); if (t === 'claro' || t === 'escuro') document.documentElement.setAttribute('data-tema', t); } catch (e) {}
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -44,18 +46,28 @@
                 <span class="subtitulo">Memória digital da aldeia</span>
             </a>
 
-            <nav class="navegacao" aria-label="Principal">
-                <ul>
-                    @foreach ($menu as $rota => $nome)
-                        <li>
-                            <a href="{{ route($rota) }}" @if (request()->routeIs($rota) || ($rota === 'arquivo' && request()->routeIs('seccao', 'peca'))) aria-current="page" @endif>{{ $nome }}</a>
-                        </li>
-                    @endforeach
-                </ul>
-            </nav>
+            {{-- No telemóvel o menu abre com este botão; sem JavaScript fica sempre aberto. --}}
+            <button type="button" class="botao-menu" data-botao-menu aria-expanded="false" aria-controls="menu-principal">
+                <span class="icone-menu" aria-hidden="true"></span>
+                <span data-texto-menu>Menu</span>
+            </button>
 
-            <div class="ferramentas">
-                <button type="button" class="botao-tema" data-botao-tema>Tema: automático</button>
+            <div class="menu-principal" id="menu-principal">
+                <div class="menu-interior">
+                <nav class="navegacao" aria-label="Principal">
+                    <ul>
+                        @foreach ($menu as $rota => $nome)
+                            <li>
+                                <a href="{{ route($rota) }}" @if (request()->routeIs($rota) || ($rota === 'arquivo' && request()->routeIs('seccao', 'peca'))) aria-current="page" @endif>{{ $nome }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </nav>
+
+                <div class="ferramentas">
+                    <button type="button" class="botao-tema" data-botao-tema>Tema: automático</button>
+                </div>
+                </div>
             </div>
         </div>
     </header>

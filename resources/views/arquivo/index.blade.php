@@ -51,6 +51,11 @@
                         <input type="search" id="q" name="q" value="{{ $pesquisa->texto }}" placeholder="Nome, lugar, assunto…">
                     </div>
 
+                    {{-- No telemóvel estes campos ficam num bloco que se abre (o JS fecha-o se não houver filtros ativos). --}}
+                    <details class="mais-filtros" open data-mais-filtros @if ($pesquisa->tipo || $pesquisa->decada || $pesquisa->tema) data-ativos @endif>
+                        <summary>Tipo, década e tema</summary>
+                        <div class="campos-filtros">
+
                     @php $tipos = $seccao ? $seccao->tipos() : \App\Enums\TipoPeca::cases(); @endphp
                     @if (count($tipos) > 1)
                         <div>
@@ -83,6 +88,9 @@
                             @endforeach
                         </select>
                     </div>
+
+                        </div>
+                    </details>
 
                     <button class="botao" type="submit">Aplicar filtros</button>
                     @if ($pesquisa->temFiltros())

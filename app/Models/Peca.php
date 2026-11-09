@@ -89,6 +89,16 @@ class Peca extends Model
         return $prefixo.str_pad((string) ($ultima + 1), 4, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Valores já usados em "Cedido por", para sugerir e evitar variantes do mesmo nome.
+     *
+     * @return list<string>
+     */
+    public static function valoresCedidoPor(): array
+    {
+        return self::whereNotNull('cedido_por')->distinct()->orderBy('cedido_por')->pluck('cedido_por')->all();
+    }
+
     public function temas(): BelongsToMany
     {
         return $this->belongsToMany(Tema::class, 'peca_tema');

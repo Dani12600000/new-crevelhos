@@ -288,7 +288,7 @@ A Sociedade Recreativa vai catalogar as 63 peças (títulos, datas, descrições
 
 - [x] **Filtros em falta na lista de peças.** Já há o filtro "sem título". Acrescenta "sem data" (`decada` vazia), "sem descrição" e "sem acervo".
 - [x] **Edição rápida na tabela.** Permite editar título, data (texto) e acervo diretamente na lista de peças, sem abrir cada peça.
-- [ ] **"Cedido por" uniformizado.** No formulário da peça, o campo deve sugerir os valores que já existem (autocompletar), para não aparecerem variantes como "Srª Eugénia" e "Sra. Eugénia". Acrescenta uma ação de administrador para trocar todas as ocorrências de um valor por outro.
+- [x] **"Cedido por" uniformizado.** No formulário da peça, o campo deve sugerir os valores que já existem (autocompletar), para não aparecerem variantes como "Srª Eugénia" e "Sra. Eugénia". Acrescenta uma ação de administrador para trocar todas as ocorrências de um valor por outro.
 
 ### 3. Pessoas
 

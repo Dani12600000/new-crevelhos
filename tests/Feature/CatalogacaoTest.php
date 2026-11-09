@@ -75,6 +75,32 @@ class CatalogacaoTest extends TestCase
         $this->assertSame($acervo->id, $peca->acervo_id);
     }
 
+    public function test_cedido_por_sugere_os_valores_que_ja_existem(): void
+    {
+        $peca = Peca::factory()->create(['cedido_por' => 'Pessoa de exemplo']);
+
+        $this->get("/admin/pecas/{$peca->ref}/edit")->assertOk()->assertSee('<datalist', false)->assertSee('Pessoa de exemplo');
+    }
+
+    public function test_admin_troca_todas_as_ocorrencias_de_cedido_por(): void
+    {
+        $this->actingAs(User::factory()->create(['papel' => Papel::Admin]));
+        $variantes = Peca::factory()->count(2)->create(['cedido_por' => 'Srª Exemplo']);
+        $outra = Peca::factory()->create(['cedido_por' => 'Outra pessoa de exemplo']);
+
+        Livewire::test(ListPecas::class)
+            ->callAction('uniformizarCedidoPor', ['de' => 'Srª Exemplo', 'para' => ' Sra. Exemplo '])
+            ->assertHasNoActionErrors();
+
+        $this->assertSame(['Sra. Exemplo', 'Sra. Exemplo'], $variantes->map(fn (Peca $p) => $p->refresh()->cedido_por)->all());
+        $this->assertSame('Outra pessoa de exemplo', $outra->refresh()->cedido_por);
+    }
+
+    public function test_editor_nao_tem_a_acao_de_uniformizar(): void
+    {
+        Livewire::test(ListPecas::class)->assertActionHidden('uniformizarCedidoPor');
+    }
+
     public function test_apagar_o_titulo_na_lista_volta_a_sem_titulo(): void
     {
         $peca = Peca::factory()->create(['titulo' => 'Título de exemplo']);

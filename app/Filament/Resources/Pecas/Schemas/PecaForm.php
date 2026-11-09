@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Pecas\Schemas;
 
 use App\Enums\TipoPeca;
+use App\Models\Peca;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -58,7 +59,11 @@ class PecaForm
                             ->helperText('Se ficar vazia, é calculada a partir do ano da data.'),
                         TextInput::make('local')->label('Local')->maxLength(255),
                         TextInput::make('autor')->label('Autor / fotógrafo')->maxLength(255)->placeholder('Desconhecido'),
-                        TextInput::make('cedido_por')->label('Cedido por')->maxLength(255)->helperText('Quem partilhou a peça.'),
+                        TextInput::make('cedido_por')
+                            ->label('Cedido por')
+                            ->maxLength(255)
+                            ->datalist(fn () => Peca::valoresCedidoPor())
+                            ->helperText('Quem partilhou a peça. Escolha um nome sugerido, se já existir.'),
                         Select::make('acervo_id')
                             ->label('Acervo')
                             ->relationship('acervo', 'nome')

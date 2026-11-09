@@ -25,6 +25,7 @@ class ListPecas extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            $this->uniformizarCedidoPorAction(),
             $this->enviarVariasAction(),
             CreateAction::make(),
         ];
@@ -51,7 +52,7 @@ class ListPecas extends ListRecords
                 Select::make('tipo')->label('Tipo')->options(TipoPeca::class)->default(TipoPeca::Foto)->required(),
                 Select::make('temas')->label('Temas')->options(fn () => Tema::orderBy('nome')->pluck('nome', 'id'))->multiple()->searchable(),
                 Select::make('acervo_id')->label('Acervo')->options(fn () => Acervo::orderBy('nome')->pluck('nome', 'id')),
-                TextInput::make('cedido_por')->label('Cedido por')->maxLength(255),
+                TextInput::make('cedido_por')->label('Cedido por')->maxLength(255)->datalist(fn () => Peca::valoresCedidoPor()),
                 Toggle::make('publicado')->label('Publicar já')->default(false)
                     ->helperText('Normalmente deixa-se por publicar até ter título e descrição.'),
             ])
@@ -74,6 +75,41 @@ class ListPecas extends ListRecords
                 });
 
                 Notification::make()->success()->title("{$criadas} peças criadas")->send();
+            });
+    }
+
+    /** Só para administradores: corrige de uma vez as variantes do mesmo nome em "Cedido por". */
+    protected function uniformizarCedidoPorAction(): Action
+    {
+        return Action::make('uniformizarCedidoPor')
+            ->label('Uniformizar "Cedido por"')
+            ->icon(Heroicon::OutlinedArrowsRightLeft)
+            ->color('gray')
+            ->visible(fn () => auth()->user()?->ehAdmin() ?? false)
+            ->requiresConfirmation()
+            ->modalHeading('Uniformizar "Cedido por"')
+            ->modalDescription('Troca um valor por outro em todas as peças que o usam. Não é possível desfazer.')
+            ->modalSubmitActionLabel('Trocar')
+            ->schema([
+                Select::make('de')
+                    ->label('Valor a trocar')
+                    ->options(function () {
+                        $valores = Peca::valoresCedidoPor();
+
+                        return array_combine($valores, $valores);
+                    })
+                    ->searchable()
+                    ->required(),
+                TextInput::make('para')
+                    ->label('Novo valor')
+                    ->maxLength(255)
+                    ->datalist(fn () => Peca::valoresCedidoPor())
+                    ->required(),
+            ])
+            ->action(function (array $data) {
+                $trocadas = Peca::where('cedido_por', $data['de'])->update(['cedido_por' => trim($data['para'])]);
+
+                Notification::make()->success()->title("{$trocadas} peças atualizadas")->send();
             });
     }
 }

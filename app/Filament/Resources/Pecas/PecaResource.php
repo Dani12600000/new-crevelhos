@@ -53,16 +53,6 @@ class PecaResource extends Resource
         return $record->ref.' · '.$record->titulo_exibicao;
     }
 
-    public static function canDelete(Model $record): bool
-    {
-        return auth()->user()?->ehAdmin() ?? false;
-    }
-
-    public static function canDeleteAny(): bool
-    {
-        return auth()->user()?->ehAdmin() ?? false;
-    }
-
     public static function getPages(): array
     {
         return [

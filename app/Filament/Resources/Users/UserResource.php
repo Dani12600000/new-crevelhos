@@ -15,7 +15,6 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 /** Só os administradores gerem utilizadores. */
@@ -36,11 +35,6 @@ class UserResource extends Resource
     public static function canViewAny(): bool
     {
         return auth()->user()?->ehAdmin() ?? false;
-    }
-
-    public static function canDelete(Model $record): bool
-    {
-        return static::canViewAny() && ! $record->is(auth()->user());
     }
 
     public static function form(Schema $schema): Schema

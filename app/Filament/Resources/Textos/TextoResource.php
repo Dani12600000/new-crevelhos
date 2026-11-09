@@ -12,7 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
 /** Textos do site. As chaves são fixas (config/crevelhos.php): só se edita o conteúdo. */
@@ -36,16 +35,6 @@ class TextoResource extends Resource
     public static function table(Table $table): Table
     {
         return TextosTable::configure($table);
-    }
-
-    public static function canCreate(): bool
-    {
-        return false;
-    }
-
-    public static function canDelete(Model $record): bool
-    {
-        return false;
     }
 
     public static function getPages(): array

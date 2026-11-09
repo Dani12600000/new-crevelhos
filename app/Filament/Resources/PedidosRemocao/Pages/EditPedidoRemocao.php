@@ -13,8 +13,7 @@ class EditPedidoRemocao extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            // O registo serve de prova do que foi feito: só um administrador o pode apagar.
-            DeleteAction::make()->visible(fn () => auth()->user()?->ehAdmin() ?? false),
+            DeleteAction::make(),
         ];
     }
 }

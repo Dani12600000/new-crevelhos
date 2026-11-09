@@ -58,6 +58,11 @@ class Pessoa extends Model
         return $this->hasMany(Marcacao::class);
     }
 
+    public function pedidosRemocao(): HasMany
+    {
+        return $this->hasMany(PedidoRemocao::class);
+    }
+
     /**
      * Junta esta pessoa (a duplicada) a $destino e apaga-a. Não se perde nada: as marcações
      * passam para $destino, a alcunha e as notas somam-se e o nome antigo fica nas notas.
@@ -71,6 +76,7 @@ class Pessoa extends Model
 
         DB::transaction(function () use ($destino) {
             $this->marcacoes()->update(['pessoa_id' => $destino->id]);
+            $this->pedidosRemocao()->update(['pessoa_id' => $destino->id]);
 
             $alcunhas = collect([$destino->alcunha, $this->alcunha])
                 ->filter()

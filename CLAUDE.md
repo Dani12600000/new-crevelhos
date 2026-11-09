@@ -279,7 +279,7 @@ O projeto base está feito (importação, site público, backoffice, marcações
 
 - [x] **Testes a falhar.** Corre `php artisan test` e corrige o que falhar. Na última execução (5 nov) falharam 8: todos os de `PesquisaTest`, `ImportadorTest::test_relatorio_tem_tudo_o_que_precisa_de_revisao` e `MarcacoesTest::test_quem_e_quem_lista_os_numeros_por_identificar`. Se for um problema do ambiente (por exemplo, a base de dados de testes), explica ao Daniel em vez de mudar os testes.
 - [x] **Acentos estragados no `.env.example`.** Corrige `APP_NAME` ("MemÃ³ria" → "Memória") e os comentários ("estÃ¡", "sÃ³"). Grava em UTF-8 sem BOM e confirma que não há mais ficheiros com `Ã`.
-- [ ] **Versões no `composer.json`.** Muda `"bacon/bacon-qr-code": "*"` para `^` + a versão major instalada (vê no `composer.lock`), e `"filament/filament": "5.11"` e `"intervention/image": "3.11"` para `^5.11` e `^3.11`. Corre `composer update --lock` e os testes.
+- [x] **Versões no `composer.json`.** Muda `"bacon/bacon-qr-code": "*"` para `^` + a versão major instalada (vê no `composer.lock`), e `"filament/filament": "5.11"` e `"intervention/image": "3.11"` para `^5.11` e `^3.11`. Corre `composer update --lock` e os testes.
 - [ ] **WebP maiores do que o original.** Em algumas peças, o `grande.webp` fica maior do que o original (por exemplo, CRV-I-0006). Em `ImagensPeca`, se a versão gerada ficar maior do que o original e o original já couber no tamanho máximo, baixa a qualidade até ficar mais pequena. Cria um comando `crevelhos:regenerar-imagens` para refazer as versões de todas as peças.
 
 ### 2. Backoffice para a catalogação

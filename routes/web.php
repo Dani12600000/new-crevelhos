@@ -2,6 +2,7 @@
 
 use App\Enums\Seccao;
 use App\Http\Controllers\ArquivoController;
+use App\Http\Controllers\CopiaSegurancaController;
 use App\Http\Controllers\FolhaCafeController;
 use App\Http\Controllers\PecaController;
 use App\Http\Controllers\PessoaController;
@@ -25,6 +26,8 @@ Route::get('/pessoa/{pessoa}', [PessoaController::class, 'show'])->name('pessoa'
 
 // Folha para imprimir e pôr na mica do café (só backoffice).
 Route::get('/admin/folha/{peca}', FolhaCafeController::class)->middleware('auth')->name('folha-cafe');
+
+Route::get('/admin/copia-seguranca', CopiaSegurancaController::class)->middleware('auth')->name('copia-seguranca');
 
 // /fototeca, /imprensa, /cartazes, /mapas-e-plantas, /videoteca, /biblioteca
 Route::get('/{seccao}', [ArquivoController::class, 'seccao'])

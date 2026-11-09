@@ -46,12 +46,12 @@ class PecasTable
                     ->label('Título')
                     ->placeholder(fn (Peca $record) => $record->titulo_exibicao)
                     ->rules(['max:255'])
-                    ->width('22rem')
+                    ->extraAttributes(['style' => 'min-width: 22rem'])
                     ->searchable(query: fn (Builder $query, string $search) => $query->where(
                         fn ($q) => $q->where('titulo', 'like', "%{$search}%")->orWhere('descricao', 'like', "%{$search}%")
                     )),
                 TextColumn::make('tipo')->label('Tipo')->badge()->sortable(),
-                TextInputColumn::make('data_texto')->label('Data')->rules(['max:255'])->width('10rem')->toggleable(),
+                TextInputColumn::make('data_texto')->label('Data')->rules(['max:255'])->extraAttributes(['style' => 'min-width: 11rem'])->toggleable(),
                 TextColumn::make('decada')->label('Década')->sortable()->toggleable(),
                 SelectColumn::make('acervo_id')
                     ->label('Acervo')

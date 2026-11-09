@@ -271,10 +271,41 @@ Transversal:
 - Há vídeos reais para a Videoteca?
 - Quem transcreve as folhas do café, e quantas fotos vão estar expostas?
 
-## Primeiro passo sugerido
+## Tarefas pendentes (revisão de 9 nov 2026)
 
-1. Criar o projeto Laravel e a base de dados `crevelhos`.
-2. Importar `crevelhos.sql` para `crevelhos_antigo` e configurar a conexão `legado`.
-3. Criar as migrações e os modelos da estrutura nova.
-4. Escrever o comando `crevelhos:importar` com o relatório e correr.
-5. Rever o relatório com o Daniel.
+O projeto base está feito (importação, site público, backoffice, marcações, folha do café, cópias de segurança). Faz estas tarefas **por ordem**, uma de cada vez, com um commit por tarefa. Corre `php artisan test` no fim de cada uma. Quando terminares uma, marca-a aqui com `[x]`.
+
+### 1. Correções
+
+- [x] **Testes a falhar.** Corre `php artisan test` e corrige o que falhar. Na última execução (5 nov) falharam 8: todos os de `PesquisaTest`, `ImportadorTest::test_relatorio_tem_tudo_o_que_precisa_de_revisao` e `MarcacoesTest::test_quem_e_quem_lista_os_numeros_por_identificar`. Se for um problema do ambiente (por exemplo, a base de dados de testes), explica ao Daniel em vez de mudar os testes.
+- [ ] **Acentos estragados no `.env.example`.** Corrige `APP_NAME` ("MemÃ³ria" → "Memória") e os comentários ("estÃ¡", "sÃ³"). Grava em UTF-8 sem BOM e confirma que não há mais ficheiros com `Ã`.
+- [ ] **Versões no `composer.json`.** Muda `"bacon/bacon-qr-code": "*"` para `^` + a versão major instalada (vê no `composer.lock`), e `"filament/filament": "5.11"` e `"intervention/image": "3.11"` para `^5.11` e `^3.11`. Corre `composer update --lock` e os testes.
+- [ ] **WebP maiores do que o original.** Em algumas peças, o `grande.webp` fica maior do que o original (por exemplo, CRV-I-0006). Em `ImagensPeca`, se a versão gerada ficar maior do que o original e o original já couber no tamanho máximo, baixa a qualidade até ficar mais pequena. Cria um comando `crevelhos:regenerar-imagens` para refazer as versões de todas as peças.
+
+### 2. Backoffice para a catalogação
+
+A Sociedade Recreativa vai catalogar as 63 peças (títulos, datas, descrições, acervos). O backoffice tem de tornar isso rápido.
+
+- [ ] **Filtros em falta na lista de peças.** Já há o filtro "sem título". Acrescenta "sem data" (`decada` vazia), "sem descrição" e "sem acervo".
+- [ ] **Edição rápida na tabela.** Permite editar título, data (texto) e acervo diretamente na lista de peças, sem abrir cada peça.
+- [ ] **"Cedido por" uniformizado.** No formulário da peça, o campo deve sugerir os valores que já existem (autocompletar), para não aparecerem variantes como "Srª Eugénia" e "Sra. Eugénia". Acrescenta uma ação de administrador para trocar todas as ocorrências de um valor por outro.
+
+### 3. Pessoas
+
+- [ ] **Juntar pessoas duplicadas.** Ação "Juntar com…" na pessoa: passa todas as marcações da pessoa duplicada para a pessoa escolhida, junta alcunha e notas (sem perder nada), regista o nome antigo nas notas e apaga a duplicada. Tudo numa transação, com confirmação e com testes.
+
+### 4. Segurança e manutenção
+
+- [ ] **Cópias de segurança fora do servidor.** As cópias ficam em `storage/app/copias`, no próprio alojamento. Acrescenta no painel do backoffice (só para administradores) um widget com a data da última cópia e um botão para a descarregar. Mostra um aviso se ninguém descarregar uma cópia há mais de 30 dias (guarda a data da última descarga).
+- [ ] **Convenção dos commits.** A partir de agora, usa [Conventional Commits](https://www.conventionalcommits.org/) **em inglês**, como no projeto do FAQ (por exemplo `fix: repair .env.example encoding`).
+
+### 5. Melhorias menores
+
+- [ ] **`sitemap.xml` e `robots.txt`**, com as páginas públicas, as secções, as peças publicadas e as pessoas visíveis.
+- [ ] **Imagem de partilha em JPEG.** O `og:image` usa o WebP, que algumas redes sociais não mostram bem. Gera também uma versão JPEG para partilha.
+- [ ] **Registo de pedidos de remoção (RGPD).** Tabela e ecrã no backoffice para registar cada pedido: quem pediu, quando, sobre que pessoa ou marcação, o que se fez e quando.
+
+### Não fazer ainda (depende de decisões)
+
+- Download do original em alta resolução ("Ver o original"): espera pela decisão da Sociedade sobre os direitos das imagens.
+- Domínio, alojamento e publicação: esperam pelas respostas do Dr. Joaquim Pombo.

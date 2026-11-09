@@ -292,7 +292,7 @@ A Sociedade Recreativa vai catalogar as 63 peças (títulos, datas, descrições
 
 ### 3. Pessoas
 
-- [ ] **Juntar pessoas duplicadas.** Ação "Juntar com…" na pessoa: passa todas as marcações da pessoa duplicada para a pessoa escolhida, junta alcunha e notas (sem perder nada), regista o nome antigo nas notas e apaga a duplicada. Tudo numa transação, com confirmação e com testes.
+- [x] **Juntar pessoas duplicadas.** Ação "Juntar com…" na pessoa: passa todas as marcações da pessoa duplicada para a pessoa escolhida, junta alcunha e notas (sem perder nada), regista o nome antigo nas notas e apaga a duplicada. Tudo numa transação, com confirmação e com testes.
 
 ### 4. Segurança e manutenção
 

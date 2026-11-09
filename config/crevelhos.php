@@ -12,6 +12,8 @@ return [
         'qualidade' => 82,
         // Limite ao baixar a qualidade de um WebP que ficou maior do que o original.
         'qualidade_minima' => 40,
+        // Lado maior (px) do JPEG usado ao partilhar nas redes sociais (og:image).
+        'partilha' => 1200,
     ],
 
     // Textos editáveis no backoffice: chave => [rótulo, tipo (html|texto)].

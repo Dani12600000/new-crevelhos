@@ -11,7 +11,7 @@
 @section('titulo', $peca->titulo_exibicao.' ('.$peca->ref.')')
 @section('descricao', \App\Support\Limpeza::semHtml($peca->descricao) ?: $peca->tipo->getLabel().' do arquivo da Memória Digital de Casais de Revelhos.')
 @if ($peca->temImagem())
-    @section('imagem', url($peca->urlImagem()))
+    @section('imagem', url($peca->urlPartilha()))
 @endif
 
 @section('conteudo')

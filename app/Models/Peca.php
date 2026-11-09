@@ -182,6 +182,11 @@ class Peca extends Model
         return $this->urlDerivada('miniatura.webp');
     }
 
+    public function urlPartilha(): ?string
+    {
+        return $this->urlDerivada('partilha.jpg');
+    }
+
     private function urlDerivada(string $nome): ?string
     {
         if (! $this->ficheiro) {

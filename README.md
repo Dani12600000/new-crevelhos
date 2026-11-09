@@ -55,6 +55,7 @@ O backoffice fica em <http://localhost:8001/admin>.
 | `php artisan crevelhos:importar` | Importa a base antiga. Pode correr várias vezes (atualiza pelo par `legado_tabela` + `legado_id`; não mexe no título, acervo, publicado e destaque depois da primeira vez). Opções: `--sem-ficheiros`, `--forcar-textos`, `--pasta=`, `--relatorio=` |
 | `php artisan crevelhos:carregar-dump` | Só desenvolvimento: cria as bases e carrega o `crevelhos.sql` |
 | `php artisan crevelhos:utilizador email@exemplo.pt --admin` | Cria ou atualiza um utilizador do backoffice (pede nome e palavra-passe) |
+| `php artisan crevelhos:regenerar-imagens` | Refaz as versões geradas de todas as peças (`grande.webp`, `miniatura.webp`, `partilha.jpg`) a partir dos originais. Corra-o uma vez depois de atualizar um site já instalado |
 | `php artisan crevelhos:copia-seguranca` | Cópia de segurança (SQL + imagens originais + fotos das folhas) em `storage/app/copias/`. Guarda as últimas 14. Corre todas as noites às 03:30 |
 | `php artisan test` | Testes (importador, limpeza, marcações, pesquisa, redirecionamentos, backoffice) |
 

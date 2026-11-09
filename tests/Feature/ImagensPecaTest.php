@@ -28,6 +28,23 @@ class ImagensPecaTest extends TestCase
         $this->assertSame(40, strlen($peca->ficheiro_hash));
     }
 
+    public function test_imagem_de_partilha_e_um_jpeg_e_e_a_usada_no_og_image(): void
+    {
+        Storage::fake('public');
+        $enviado = UploadedFile::fake()->image('exemplo.png', 1600, 1000)->store('pecas/envios', 'public');
+
+        $peca = Peca::factory()->create(['ficheiro' => $enviado]);
+
+        $caminho = Storage::disk('public')->path($peca->pasta().'/partilha.jpg');
+        [$largura, $altura, $tipo] = getimagesize($caminho);
+        $this->assertSame([1200, 750, IMAGETYPE_JPEG], [$largura, $altura, $tipo]);
+
+        $this->get(route('peca', $peca))
+            ->assertOk()
+            ->assertSee('property="og:image"', false)
+            ->assertSee($peca->pasta().'/partilha.jpg', false);
+    }
+
     public function test_ficheiro_em_falta_nao_impede_gravar(): void
     {
         Storage::fake('public');

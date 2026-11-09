@@ -12,6 +12,7 @@ use Intervention\Image\Interfaces\ImageInterface;
  * Guarda o ficheiro original de uma peça em pecas/{ref}/ e gera:
  *  - grande.webp     (para a página da peça)
  *  - miniatura.webp  (para grelhas e listas)
+ *  - partilha.jpg    (para as redes sociais, que nem sempre mostram WebP)
  * Usa GD, que existe em qualquer alojamento partilhado.
  */
 class ImagensPeca
@@ -52,7 +53,7 @@ class ImagensPeca
         $this->gerarVersoes($peca);
     }
 
-    /** (Re)gera grande.webp e miniatura.webp a partir do original. */
+    /** (Re)gera grande.webp, miniatura.webp e partilha.jpg a partir do original. */
     public function gerarVersoes(Peca $peca): void
     {
         $disco = Storage::disk('public');
@@ -70,6 +71,11 @@ class ImagensPeca
             config('crevelhos.imagens.miniatura'),
             $disco->path($peca->pasta().'/miniatura.webp'),
         );
+
+        $this->manager->read($original)->orient()
+            ->scaleDown(config('crevelhos.imagens.partilha'), config('crevelhos.imagens.partilha'))
+            ->toJpeg(config('crevelhos.imagens.qualidade'))
+            ->save($disco->path($peca->pasta().'/partilha.jpg'));
     }
 
     /**

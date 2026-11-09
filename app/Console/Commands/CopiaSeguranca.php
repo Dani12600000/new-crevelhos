@@ -83,8 +83,8 @@ class CopiaSeguranca extends Command
         $ficheiros = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($origem, \FilesystemIterator::SKIP_DOTS));
         foreach ($ficheiros as $ficheiro) {
             $relativo = str_replace('\\', '/', substr($ficheiro->getPathname(), strlen($origem) + 1));
-            // As versões WebP voltam a gerar-se a partir do original: não vão na cópia.
-            if (! str_ends_with($relativo, '.webp')) {
+            // As versões geradas voltam a fazer-se a partir do original: não vão na cópia.
+            if (! str_ends_with($relativo, '.webp') && basename($relativo) !== 'partilha.jpg') {
                 $zip->addFile($ficheiro->getPathname(), "{$destino}/{$relativo}");
                 $n++;
             }

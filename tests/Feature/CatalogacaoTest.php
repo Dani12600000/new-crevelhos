@@ -56,4 +56,32 @@ class CatalogacaoTest extends TestCase
             ->assertCanSeeTableRecords([$completa])
             ->assertCanNotSeeTableRecords([$incompleta]);
     }
+
+    public function test_edicao_rapida_grava_titulo_data_e_acervo_na_lista(): void
+    {
+        $peca = Peca::factory()->create(['titulo' => null, 'data_texto' => null, 'acervo_id' => null]);
+        $acervo = Acervo::create(['nome' => 'Acervo de exemplo']);
+
+        Livewire::test(ListPecas::class)
+            ->assertSee('Acervo de exemplo')
+            ->call('updateTableColumnState', 'titulo', (string) $peca->id, 'Título de exemplo')
+            ->call('updateTableColumnState', 'data_texto', (string) $peca->id, 'Outubro de 1967')
+            ->call('updateTableColumnState', 'acervo_id', (string) $peca->id, (string) $acervo->id);
+
+        $peca->refresh();
+        $this->assertSame('Título de exemplo', $peca->titulo);
+        $this->assertSame('Outubro de 1967', $peca->data_texto);
+        $this->assertSame(1960, $peca->decada); // a década acompanha a data
+        $this->assertSame($acervo->id, $peca->acervo_id);
+    }
+
+    public function test_apagar_o_titulo_na_lista_volta_a_sem_titulo(): void
+    {
+        $peca = Peca::factory()->create(['titulo' => 'Título de exemplo']);
+
+        Livewire::test(ListPecas::class)
+            ->call('updateTableColumnState', 'titulo', (string) $peca->id, '');
+
+        $this->assertNull($peca->refresh()->titulo);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Pecas\Tables;
 
 use App\Enums\TipoPeca;
 use App\Filament\Resources\Pecas\PecaResource;
+use App\Models\Acervo;
 use App\Models\Peca;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -14,7 +15,9 @@ use Filament\Actions\EditAction;
 use Filament\Support\Enums\FontFamily;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -38,17 +41,23 @@ class PecasTable
                     ->fontFamily(FontFamily::Mono)
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('titulo_exibicao')
+                // Edição rápida: título, data e acervo gravam-se diretamente na lista.
+                TextInputColumn::make('titulo')
                     ->label('Título')
-                    ->limit(60)
-                    ->wrap()
-                    ->description(fn (Peca $record) => blank($record->titulo) ? 'sem título' : null)
+                    ->placeholder(fn (Peca $record) => $record->titulo_exibicao)
+                    ->rules(['max:255'])
+                    ->width('22rem')
                     ->searchable(query: fn (Builder $query, string $search) => $query->where(
                         fn ($q) => $q->where('titulo', 'like', "%{$search}%")->orWhere('descricao', 'like', "%{$search}%")
                     )),
                 TextColumn::make('tipo')->label('Tipo')->badge()->sortable(),
-                TextColumn::make('data_texto')->label('Data')->toggleable(),
+                TextInputColumn::make('data_texto')->label('Data')->rules(['max:255'])->width('10rem')->toggleable(),
                 TextColumn::make('decada')->label('Década')->sortable()->toggleable(),
+                SelectColumn::make('acervo_id')
+                    ->label('Acervo')
+                    ->options(fn () => once(fn () => Acervo::orderBy('nome')->pluck('nome', 'id')->all()))
+                    ->placeholder('Sem acervo')
+                    ->toggleable(),
                 TextColumn::make('temas.nome')->label('Temas')->badge()->limitList(2)->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('marcacoes_count')->label('Números')->counts('marcacoes')->toggleable(),
                 ToggleColumn::make('publicado')->label('Publicada'),

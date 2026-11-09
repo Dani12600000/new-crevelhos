@@ -67,6 +67,24 @@ class PecasTable
                         true: fn (Builder $q) => $q->whereNull('titulo'),
                         false: fn (Builder $q) => $q->whereNotNull('titulo'),
                     ),
+                TernaryFilter::make('sem_data')->label('Data')
+                    ->trueLabel('Sem data')->falseLabel('Com data')
+                    ->queries(
+                        true: fn (Builder $q) => $q->whereNull('decada'),
+                        false: fn (Builder $q) => $q->whereNotNull('decada'),
+                    ),
+                TernaryFilter::make('sem_descricao')->label('Descrição')
+                    ->trueLabel('Sem descrição')->falseLabel('Com descrição')
+                    ->queries(
+                        true: fn (Builder $q) => $q->where(fn ($q) => $q->whereNull('descricao')->orWhere('descricao', '')),
+                        false: fn (Builder $q) => $q->whereNotNull('descricao')->where('descricao', '!=', ''),
+                    ),
+                TernaryFilter::make('sem_acervo')->label('Acervo')
+                    ->trueLabel('Sem acervo')->falseLabel('Com acervo')
+                    ->queries(
+                        true: fn (Builder $q) => $q->whereNull('acervo_id'),
+                        false: fn (Builder $q) => $q->whereNotNull('acervo_id'),
+                    ),
             ])
             ->recordActions([
                 EditAction::make(),

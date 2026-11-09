@@ -286,7 +286,7 @@ O projeto base está feito (importação, site público, backoffice, marcações
 
 A Sociedade Recreativa vai catalogar as 63 peças (títulos, datas, descrições, acervos). O backoffice tem de tornar isso rápido.
 
-- [ ] **Filtros em falta na lista de peças.** Já há o filtro "sem título". Acrescenta "sem data" (`decada` vazia), "sem descrição" e "sem acervo".
+- [x] **Filtros em falta na lista de peças.** Já há o filtro "sem título". Acrescenta "sem data" (`decada` vazia), "sem descrição" e "sem acervo".
 - [ ] **Edição rápida na tabela.** Permite editar título, data (texto) e acervo diretamente na lista de peças, sem abrir cada peça.
 - [ ] **"Cedido por" uniformizado.** No formulário da peça, o campo deve sugerir os valores que já existem (autocompletar), para não aparecerem variantes como "Srª Eugénia" e "Sra. Eugénia". Acrescenta uma ação de administrador para trocar todas as ocorrências de um valor por outro.
 

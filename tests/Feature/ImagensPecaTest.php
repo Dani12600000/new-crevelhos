@@ -36,4 +36,54 @@ class ImagensPecaTest extends TestCase
 
         $this->assertTrue($peca->exists);
     }
+
+    public function test_webp_fica_mais_pequeno_do_que_um_original_muito_comprimido(): void
+    {
+        Storage::fake('public');
+        $disco = Storage::disk('public');
+
+        // Sem poder baixar a qualidade, o WebP fica maior do que o original.
+        config(['crevelhos.imagens.qualidade' => 100, 'crevelhos.imagens.qualidade_minima' => 100]);
+        $sem = Peca::factory()->create(['ficheiro' => $this->jpegComprimido('pecas/envios/a.jpg')]);
+        $this->assertGreaterThan($disco->size($sem->ficheiro), $disco->size($sem->pasta().'/grande.webp'));
+
+        config(['crevelhos.imagens.qualidade_minima' => 40]);
+        $com = Peca::factory()->create(['ficheiro' => $this->jpegComprimido('pecas/envios/b.jpg')]);
+        $this->assertLessThan($disco->size($com->ficheiro), $disco->size($com->pasta().'/grande.webp'));
+    }
+
+    public function test_regenerar_imagens_refaz_as_versoes_e_avisa_de_ficheiros_em_falta(): void
+    {
+        Storage::fake('public');
+        $peca = Peca::factory()->create([
+            'ficheiro' => UploadedFile::fake()->image('exemplo.jpg', 800, 600)->store('pecas/envios', 'public'),
+        ]);
+        $falta = Peca::factory()->create();
+        $falta->updateQuietly(['ficheiro' => 'pecas/'.$falta->ref.'/original.jpg']);
+        $disco = Storage::disk('public');
+        $disco->delete($peca->pasta().'/grande.webp');
+
+        $this->artisan('crevelhos:regenerar-imagens')
+            ->expectsOutputToContain($falta->ref)
+            ->assertFailed();
+
+        $disco->assertExists($peca->pasta().'/grande.webp');
+    }
+
+    private function jpegComprimido(string $caminho): string
+    {
+        mt_srand(1962);
+        $imagem = imagecreatetruecolor(400, 300);
+        for ($x = 0; $x < 400; $x += 2) {
+            for ($y = 0; $y < 300; $y += 2) {
+                imagefilledrectangle($imagem, $x, $y, $x + 1, $y + 1, mt_rand(0, 0xFFFFFF));
+            }
+        }
+
+        ob_start();
+        imagejpeg($imagem, null, 60);
+        Storage::disk('public')->put($caminho, ob_get_clean());
+
+        return $caminho;
+    }
 }

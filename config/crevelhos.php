@@ -10,6 +10,8 @@ return [
         'grande' => 2000,
         'miniatura' => 480,
         'qualidade' => 82,
+        // Limite ao baixar a qualidade de um WebP que ficou maior do que o original.
+        'qualidade_minima' => 40,
     ],
 
     // Textos editáveis no backoffice: chave => [rótulo, tipo (html|texto)].

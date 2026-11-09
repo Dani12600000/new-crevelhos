@@ -6,6 +6,7 @@ use App\Models\Peca;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Interfaces\ImageInterface;
 
 /**
  * Guarda o ficheiro original de uma peça em pecas/{ref}/ e gera:
@@ -61,16 +62,37 @@ class ImagensPeca
         $peca->largura = $imagem->width();
         $peca->altura = $imagem->height();
 
+        $this->gravarWebp($imagem, $original, config('crevelhos.imagens.grande'), $disco->path($peca->pasta().'/grande.webp'));
+
+        $this->gravarWebp(
+            $this->manager->read($original)->orient(),
+            $original,
+            config('crevelhos.imagens.miniatura'),
+            $disco->path($peca->pasta().'/miniatura.webp'),
+        );
+    }
+
+    /**
+     * Reduz a imagem ao tamanho máximo e grava-a em WebP. Se o original já couber nesse
+     * tamanho, a versão só compensa se for mais pequena: baixa-se a qualidade até o ser
+     * (sem passar da qualidade mínima, para o texto dos recortes continuar legível).
+     */
+    private function gravarWebp(ImageInterface $imagem, string $original, int $maximo, string $destino): void
+    {
+        $originalCabe = max($imagem->width(), $imagem->height()) <= $maximo;
+        $bytesOriginal = filesize($original);
         $qualidade = config('crevelhos.imagens.qualidade');
+        $minima = config('crevelhos.imagens.qualidade_minima');
 
-        $imagem->scaleDown(config('crevelhos.imagens.grande'), config('crevelhos.imagens.grande'))
-            ->toWebp($qualidade)
-            ->save($disco->path($peca->pasta().'/grande.webp'));
+        $imagem->scaleDown($maximo, $maximo);
+        $webp = $imagem->toWebp($qualidade);
 
-        $this->manager->read($original)->orient()
-            ->scaleDown(config('crevelhos.imagens.miniatura'), config('crevelhos.imagens.miniatura'))
-            ->toWebp($qualidade)
-            ->save($disco->path($peca->pasta().'/miniatura.webp'));
+        while ($originalCabe && $webp->size() >= $bytesOriginal && $qualidade > $minima) {
+            $qualidade = max($minima, $qualidade - 10);
+            $webp = $imagem->toWebp($qualidade);
+        }
+
+        $webp->save($destino);
     }
 
     /**

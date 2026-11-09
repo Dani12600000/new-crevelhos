@@ -259,7 +259,7 @@ Transversal:
 
 - Começar pelo **importador e pelo relatório**: é o que valida a estrutura nova com dados reais.
 - Explica as decisões e os conceitos novos do Laravel ou do Filament quando aparecem.
-- Commits pequenos e claros.
+- Commits pequenos e claros, em [Conventional Commits](https://www.conventionalcommits.org/) e em inglês (por exemplo `fix: repair .env.example encoding`).
 - Não inventar conteúdo: o arquivo é real. Para testes, usar factories marcadas como exemplo, nunca nomes inventados em fotos reais.
 
 ## Perguntas ainda em aberto (Dr. Joaquim Pombo)
@@ -297,7 +297,7 @@ A Sociedade Recreativa vai catalogar as 63 peças (títulos, datas, descrições
 ### 4. Segurança e manutenção
 
 - [x] **Cópias de segurança fora do servidor.** As cópias ficam em `storage/app/copias`, no próprio alojamento. Acrescenta no painel do backoffice (só para administradores) um widget com a data da última cópia e um botão para a descarregar. Mostra um aviso se ninguém descarregar uma cópia há mais de 30 dias (guarda a data da última descarga).
-- [ ] **Convenção dos commits.** A partir de agora, usa [Conventional Commits](https://www.conventionalcommits.org/) **em inglês**, como no projeto do FAQ (por exemplo `fix: repair .env.example encoding`).
+- [x] **Convenção dos commits.** A partir de agora, usa [Conventional Commits](https://www.conventionalcommits.org/) **em inglês**, como no projeto do FAQ (por exemplo `fix: repair .env.example encoding`).
 
 ### 5. Melhorias menores
 

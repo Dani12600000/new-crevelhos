@@ -6,6 +6,7 @@ use App\Http\Controllers\CopiaSegurancaController;
 use App\Http\Controllers\FolhaCafeController;
 use App\Http\Controllers\PecaController;
 use App\Http\Controllers\PessoaController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,9 @@ Route::get('/arquivo', [ArquivoController::class, 'index'])->name('arquivo');
 Route::get('/peca-ao-acaso', [PecaController::class, 'aoAcaso'])->name('peca.acaso');
 Route::get('/peca/{peca}', [PecaController::class, 'show'])->name('peca');
 Route::get('/pessoa/{pessoa}', [PessoaController::class, 'show'])->name('pessoa');
+
+Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 // Folha para imprimir e pôr na mica do café (só backoffice).
 Route::get('/admin/folha/{peca}', FolhaCafeController::class)->middleware('auth')->name('folha-cafe');

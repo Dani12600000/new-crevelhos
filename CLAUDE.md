@@ -301,7 +301,7 @@ A Sociedade Recreativa vai catalogar as 63 peças (títulos, datas, descrições
 
 ### 5. Melhorias menores
 
-- [ ] **`sitemap.xml` e `robots.txt`**, com as páginas públicas, as secções, as peças publicadas e as pessoas visíveis.
+- [x] **`sitemap.xml` e `robots.txt`**, com as páginas públicas, as secções, as peças publicadas e as pessoas visíveis.
 - [ ] **Imagem de partilha em JPEG.** O `og:image` usa o WebP, que algumas redes sociais não mostram bem. Gera também uma versão JPEG para partilha.
 - [ ] **Registo de pedidos de remoção (RGPD).** Tabela e ecrã no backoffice para registar cada pedido: quem pediu, quando, sobre que pessoa ou marcação, o que se fez e quando.
 

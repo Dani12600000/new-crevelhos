@@ -1,0 +1,12 @@
+{{-- A declaração está partida para não ser lida como PHP em alojamentos com short_open_tag ligado. --}}
+{!! '<'.'?xml version="1.0" encoding="UTF-8"?'.'>' !!}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+@foreach ($urls as $url)
+    <url>
+        <loc>{{ $url['loc'] }}</loc>
+@if ($url['lastmod'])
+        <lastmod>{{ $url['lastmod']->toAtomString() }}</lastmod>
+@endif
+    </url>
+@endforeach
+</urlset>

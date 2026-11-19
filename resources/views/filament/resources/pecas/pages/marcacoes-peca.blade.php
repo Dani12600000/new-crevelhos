@@ -49,7 +49,9 @@
         }
         .crv-mini.vazio span { background: #fff; color: #1d4f9e; }
         .crv-mini.ativa, .crv-mini:hover { border-color: #f59e0b; }
-        .crv-lista { display: grid; gap: .75rem; }
+        /* minmax(0, 1fr) e min-width: 0 deixam a coluna encolher; senão a grelha de recortes alarga a página. */
+        .crv-editor > *, .crv-lista > * { min-width: 0; }
+        .crv-lista { display: grid; grid-template-columns: minmax(0, 1fr); gap: .75rem; }
         .crv-cartao { border: 1px solid rgb(0 0 0 / .1); border-radius: .75rem; padding: .9rem; background: rgb(255 255 255 / .02); }
         .crv-cartao.ativa { border-color: #f59e0b; box-shadow: 0 0 0 1px #f59e0b; }
         .crv-topo { display: flex; gap: .75rem; align-items: center; }
@@ -113,6 +115,7 @@
 
             <div class="crv-janela {{ $compacto ? 'crv-compacto' : '' }}" x-ref="janela"
                  x-bind:class="{ 'crv-ver-caras': recortes }"
+                 x-bind:style="{ overflowX: zoom > 1 ? 'auto' : 'hidden' }"
                  x-on:wheel="if ($event.ctrlKey) { $event.preventDefault(); mudarZoom($event.deltaY < 0 ? 1.25 : 0.8) }">
             <div class="crv-imagem"
                  x-bind:style="{ width: (zoom * 100) + '%' }"

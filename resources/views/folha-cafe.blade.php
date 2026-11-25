@@ -18,6 +18,7 @@
         .imagem-marcada { width: fit-content; margin: 0 auto; }
         .marca-numero { width: 6mm; height: 6mm; font-size: 8pt; border-width: 1px; }
         .marca-numero .balao { display: none; }
+        .folha.numeros-transparentes .marca-numero { opacity: 0.35; }
         .frase { font-weight: 700; font-size: 12pt; margin: 2mm 0 3mm; }
         .linhas { list-style: none; padding: 0; margin: 0; }
         .linhas li { border-bottom: 1px solid #999; height: 8.5mm; display: flex; align-items: flex-end; gap: 2mm; font-size: 9pt; color: #555; }
@@ -29,7 +30,11 @@
 <body>
     <div class="acoes">
         <button class="botao" type="button" onclick="window.print()">Imprimir (A5)</button>
-        <a href="{{ url()->previous() }}">Voltar</a>
+        <label style="margin-left: 1rem; font-size: 0.95rem;">
+            <input type="checkbox" id="numeros-transparentes">
+            Números transparentes
+        </label>
+        <a href="{{ url()->previous() }}" style="margin-left: 1rem;">Voltar</a>
     </div>
 
     <article class="folha">
@@ -69,5 +74,10 @@
             <span>Obrigado por ajudar a guardar a memória da aldeia.</span>
         </footer>
     </article>
+    <script>
+        document.getElementById('numeros-transparentes').addEventListener('change', function (e) {
+            document.querySelector('.folha').classList.toggle('numeros-transparentes', e.target.checked);
+        });
+    </script>
 </body>
 </html>
